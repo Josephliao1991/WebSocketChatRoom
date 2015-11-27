@@ -41,17 +41,18 @@ var server = ws.createServer(function (connection) {
 			var key = checkUserLogin(str)
 			if (key == null) {
 				return connection.sendText("loginFail")
-
-				connection.nickname = key
-				broadcast("["+key+"] 進入聊天室")
-				console.log("["+key+"] 進入聊天室");
-
-				if(historyMessage.length > 0) {
-					historyMessage.forEach(function (key) {
-						connection.sendText(key)
-					})
-				}
 			}
+
+			connection.nickname = key
+			broadcast("["+key+"] 進入聊天室")
+			console.log("["+key+"] 進入聊天室");
+
+			if(historyMessage.length > 0) {
+				historyMessage.forEach(function (key) {
+					connection.sendText(key)
+				})
+			}
+
 		}else{
 			broadcast("["+connection.nickname+"] ： "+str)
 			console.log("["+connection.nickname+"] ： "+str);
@@ -67,6 +68,7 @@ var server = ws.createServer(function (connection) {
 				historyMessage.push("["+connection.nickname+"] ： "+str)
 			}
 		}
+
 	})
 
 	connection.on("close", function () {

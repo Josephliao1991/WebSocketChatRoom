@@ -35,6 +35,7 @@ http.createServer(function (req, res) {
 var server = ws.createServer(function (connection) {
 	connection.nickname = null
 	connection.on("text", function (str) {
+
 		if (connection.nickname === null) {
 			//Check User Login
 			var key = checkUserLogin(str)
@@ -50,20 +51,20 @@ var server = ws.createServer(function (connection) {
 						connection.sendText(key)
 					})
 				}
-			}else{
-				broadcast("["+connection.nickname+"] ： "+str)
-				console.log("["+connection.nickname+"] ： "+str);
+			}
+		}else{
+			broadcast("["+connection.nickname+"] ： "+str)
+			console.log("["+connection.nickname+"] ： "+str);
 
-				if(historyMessage.length > historyMaxCount){
-					var newHistoryMessage = []
-					for (var i = historyMaxCount-20; i < historyMaxCount; i++) {
-						newHistoryMessage.push(historyMessage[i])
-					}
-					historyMessage = newHistoryMessage;
-
-				}else {
-					historyMessage.push("["+connection.nickname+"] ： "+str)
+			if(historyMessage.length > historyMaxCount){
+				var newHistoryMessage = []
+				for (var i = historyMaxCount-20; i < historyMaxCount; i++) {
+					newHistoryMessage.push(historyMessage[i])
 				}
+				historyMessage = newHistoryMessage;
+
+			}else {
+				historyMessage.push("["+connection.nickname+"] ： "+str)
 			}
 		}
 	})

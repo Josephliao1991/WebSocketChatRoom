@@ -40,32 +40,32 @@ var server = ws.createServer(function (connection) {
 			var key = checkUserLogin(str)
 			if (key == null) {
 				return connection.sendText("loginFail")
-			}
 
-			connection.nickname = key
-			broadcast("["+key+"] 進入聊天室")
-			console.log("["+key+"] 進入聊天室");
+				connection.nickname = key
+				broadcast("["+key+"] 進入聊天室")
+				console.log("["+key+"] 進入聊天室");
 
-			if(historyMessage.length > 0) {
-				historyMessage.forEach(function (key) {
-					connection.sendText(key)
-				})
-			}
-
-		} else
-			broadcast("["+connection.nickname+"] ： "+str)
-			console.log("["+connection.nickname+"] ： "+str);
-
-			if(historyMessage.length > historyMaxCount){
-				var newHistoryMessage = []
-				for (var i = historyMaxCount-20; i < historyMaxCount; i++) {
-					newHistoryMessage.push(historyMessage[i])
+				if(historyMessage.length > 0) {
+					historyMessage.forEach(function (key) {
+						connection.sendText(key)
+					})
 				}
-				historyMessage = newHistoryMessage;
+			}else{
+				broadcast("["+connection.nickname+"] ： "+str)
+				console.log("["+connection.nickname+"] ： "+str);
 
-			}else {
-				historyMessage.push("["+connection.nickname+"] ： "+str)
+				if(historyMessage.length > historyMaxCount){
+					var newHistoryMessage = []
+					for (var i = historyMaxCount-20; i < historyMaxCount; i++) {
+						newHistoryMessage.push(historyMessage[i])
+					}
+					historyMessage = newHistoryMessage;
+
+				}else {
+					historyMessage.push("["+connection.nickname+"] ： "+str)
+				}
 			}
+		}
 	})
 
 	connection.on("close", function () {
@@ -81,9 +81,9 @@ var server = ws.createServer(function (connection) {
 server.listen(8081)
 
 function broadcast(str) {
-		server.connections.forEach(function (connection) {
-			connection.sendText(str)
-		})
+	server.connections.forEach(function (connection) {
+		connection.sendText(str)
+	})
 }
 
 
